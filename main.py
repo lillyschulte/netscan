@@ -23,7 +23,7 @@ label.pack()
 
 # Create a checkbox widget to allow the user to include manufacturer information in the results
 include_manufacturer = tk.BooleanVar()
-include_manufacturer_checkbox = tk.Checkbutton(window, text="Include manufacturer", variable=include_manufacturer)
+include_manufacturer_checkbox = tk.Checkbutton(window, text="Include OS", variable=include_manufacturer)
 include_manufacturer_checkbox.pack()
 
 # Function to scan the network and display the results
