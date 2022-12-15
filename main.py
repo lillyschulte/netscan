@@ -21,7 +21,11 @@ progress_bar.pack(fill=tk.X)
 label = tk.Label(window, text="Input network ip:")
 label.pack()
 
-# Function to scan the network and display the results
+# Create a checkbox widget to allow the user to include manufacturer information in the results
+include_manufacturer = tk.BooleanVar()
+include_manufacturer_checkbox = tk.Checkbutton(window, text="Include manufacturer", variable=include_manufacturer)
+include_manufacturer_checkbox.pack()
+
 # Function to scan the network and display the results
 def scan_network():
     # Get the user input for the network variable
@@ -36,8 +40,12 @@ def scan_network():
     # Use the nmap command to scan the network and get the MAC addresses
     output = subprocess.run(["nmap", "-sn", "-sP", network], capture_output=True)
 
-    # Use the nmap command to get the manufacturer of each device
-    output2 = subprocess.run(["nmap", "-O", "--osscan-limit", network], capture_output=True)
+    # Check if the user has selected to include manufacturer information
+    if include_manufacturer.get():
+        # Use the nmap command to get the manufacturer of each device
+        output2 = subprocess.run(["nmap", "-O", network], capture_output=True)
+    else:
+        output2 = None
 
     # Stop the progress bar
     progress_bar.stop()
@@ -63,18 +71,18 @@ def scan_network():
             # Print the MAC address to the text area
             text_area.insert(tk.END, mac_address + "\n")
 
-    # Loop through the output2 lines
-    for line in output2.stdout.decode().splitlines():
-        # Check for lines containing device manufacturer
-        if "Device type" in line:
-            # Extract the manufacturer from the line
-            manufacturer = line.split("Device type: ")[1]
+    # Check if the user has selected to include manufacturer information
+    if output2:
+        # Loop through the output2 lines
+        for line in output2.stdout.decode().splitlines():
+            # Check for lines containing device manufacturer
+            if "Device type" in line:
+                # Extract the manufacturer from the line
+                manufacturer = line.split("Device type: ")[1]
 
-            # Print the manufacturer to the text area
-            text_area.insert(tk.END, manufacturer + "\n")
+                # Print the manufacturer to the text area
+                text_area.insert(tk.END, manufacturer + "\n")
 
-    # Set the progress bar value to 100
-    progress_bar["value"] = 100
 
 # Create an Entry widget to allow user input
 network_input = tk.Entry(window)
