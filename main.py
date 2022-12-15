@@ -22,6 +22,7 @@ label = tk.Label(window, text="Input network ip:")
 label.pack()
 
 # Function to scan the network and display the results
+# Function to scan the network and display the results
 def scan_network():
     # Get the user input for the network variable
     network = network_input.get()
@@ -32,8 +33,11 @@ def scan_network():
     # Start the progress bar
     progress_bar.start()
 
-    # Use the nmap command to scan the network
-    output = subprocess.run(["nmap", "-sn", network], capture_output=True)
+    # Use the nmap command to scan the network and get the MAC addresses
+    output = subprocess.run(["nmap", "-sn", "-sP", network], capture_output=True)
+
+    # Use the nmap command to get the manufacturer of each device
+    output2 = subprocess.run(["nmap", "-O", "--osscan-limit", network], capture_output=True)
 
     # Stop the progress bar
     progress_bar.stop()
@@ -50,6 +54,24 @@ def scan_network():
 
             # Print the IP address to the text area
             text_area.insert(tk.END, ip_address + "\n")
+
+        # Check for lines containing MAC addresses
+        if "MAC Address:" in line:
+            # Extract the MAC address from the line
+            mac_address = line.split("MAC Address: ")[1]
+
+            # Print the MAC address to the text area
+            text_area.insert(tk.END, mac_address + "\n")
+
+    # Loop through the output2 lines
+    for line in output2.stdout.decode().splitlines():
+        # Check for lines containing device manufacturer
+        if "Device type" in line:
+            # Extract the manufacturer from the line
+            manufacturer = line.split("Device type: ")[1]
+
+            # Print the manufacturer to the text area
+            text_area.insert(tk.END, manufacturer + "\n")
 
     # Set the progress bar value to 100
     progress_bar["value"] = 100
