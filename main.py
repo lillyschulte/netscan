@@ -9,22 +9,25 @@ from tkinter import ttk
 window = tk.Tk()
 window.title("Network Scanner")
 
+# Set the background color of the GUI window to black
+window.configure(background="black")
+
 # Create a text area to display the results
-text_area = tk.Text(window)
+text_area = tk.Text(window, bg="black", fg="white")
 text_area.pack(fill=tk.BOTH, expand=True)
 
 # Create a progress bar
-progress_bar = ttk.Progressbar(window, mode="determinate")
+progress_bar = ttk.Progressbar(window, mode="determinate",)
 progress_bar.pack(fill=tk.X)
-
-# Create a Label widget to display the text
-label = tk.Label(window, text="Input network ip:")
-label.pack()
 
 # Create a checkbox widget to allow the user to include manufacturer information in the results
 include_manufacturer = tk.BooleanVar()
-include_manufacturer_checkbox = tk.Checkbutton(window, text="Include OS", variable=include_manufacturer)
+include_manufacturer_checkbox = tk.Checkbutton(window, text="Include OS", variable=include_manufacturer, bg="black", fg="white")
 include_manufacturer_checkbox.pack()
+
+# Create a Label widget to display the text
+label = tk.Label(window, text="Input network ip:", bg="black", fg="white")
+label.pack()
 
 # Function to scan the network and display the results
 def scan_network():
@@ -52,6 +55,9 @@ def scan_network():
 
     # Clear the text area
     text_area.delete(1.0, tk.END)
+
+    # Set the progress bar value to 100
+    progress_bar["value"] = 100
 
     # Loop through the output lines
     for line in output.stdout.decode().splitlines():
