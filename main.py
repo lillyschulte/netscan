@@ -12,6 +12,9 @@ window.title("Network Scanner")
 text_area = tk.Text(window)
 text_area.pack(fill=tk.BOTH, expand=True)
 
+# Create a Label widget to display the text
+label = tk.Label(window, text="Input network ip:")
+label.pack()
 
 # Function to scan the network and display the results
 def scan_network():
@@ -33,7 +36,6 @@ def scan_network():
 
             # Print the IP address to the text area
             text_area.insert(tk.END, ip_address + "\n")
-
 
 # Create an Entry widget to allow user input
 network_input = tk.Entry(window)
