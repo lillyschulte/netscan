@@ -71,6 +71,9 @@ def scan_network():
             # Print the MAC address to the text area
             text_area.insert(tk.END, mac_address + "\n")
 
+            # Insert a newline after every device
+            text_area.insert(tk.END, "\n")
+
     # Check if the user has selected to include manufacturer information
     if output2:
         # Loop through the output2 lines
