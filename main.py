@@ -3,6 +3,7 @@ import socket
 import subprocess
 import tkinter as tk
 from tkinter import Entry
+from tkinter import ttk
 
 # Create the GUI window
 window = tk.Tk()
@@ -11,6 +12,10 @@ window.title("Network Scanner")
 # Create a text area to display the results
 text_area = tk.Text(window)
 text_area.pack(fill=tk.BOTH, expand=True)
+
+# Create a progress bar
+progress_bar = ttk.Progressbar(window, mode="determinate")
+progress_bar.pack(fill=tk.X)
 
 # Create a Label widget to display the text
 label = tk.Label(window, text="Input network ip:")
@@ -21,8 +26,17 @@ def scan_network():
     # Get the user input for the network variable
     network = network_input.get()
 
+    # Set the maximum value of the progress bar
+    progress_bar["maximum"] = 100
+
+    # Start the progress bar
+    progress_bar.start()
+
     # Use the nmap command to scan the network
     output = subprocess.run(["nmap", "-sn", network], capture_output=True)
+
+    # Stop the progress bar
+    progress_bar.stop()
 
     # Clear the text area
     text_area.delete(1.0, tk.END)
@@ -36,6 +50,9 @@ def scan_network():
 
             # Print the IP address to the text area
             text_area.insert(tk.END, ip_address + "\n")
+
+    # Set the progress bar value to 100
+    progress_bar["value"] = 100
 
 # Create an Entry widget to allow user input
 network_input = tk.Entry(window)
